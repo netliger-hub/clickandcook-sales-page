@@ -812,6 +812,42 @@ svg[class] { display: inline-block; vertical-align: middle; }
   transition: transform 200ms ease, opacity 200ms ease;
 }
 .sticky-bar.hidden { transform: translateY(110%); opacity: 0; pointer-events: none; }
+
+/* ============================================================
+   In-app browser banner — สอนเปิดใน Safari/Chrome เมื่อบังคับ
+   ออกจาก browser ในแอป FB/IG ไม่สำเร็จ
+   ============================================================ */
+#iab-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 46px 13px 18px;
+  background: var(--black);
+  color: var(--ivory);
+  font-size: 13.5px;
+  line-height: 1.5;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, .25);
+}
+#iab-banner strong { color: var(--latte-light); }
+#iab-banner button {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: 0;
+  color: var(--ivory);
+  font-size: 24px;
+  line-height: 1;
+  padding: 6px;
+  cursor: pointer;
+}
+
 .cta-hint {
   margin-top: 14px;
   font-size: 13.5px;

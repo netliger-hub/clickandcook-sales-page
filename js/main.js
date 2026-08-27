@@ -7,6 +7,47 @@
 (function () {
   'use strict';
 
+  /* ---------- Break out of in-app browsers ----------
+     m.me ลิงก์ไม่ทำงานใน in-app browser ของ Facebook/Instagram
+     (redirect ไป m.facebook.com แล้วโชว์ "Unsupported browser")
+     → ถ้าตรวจพบ พยายามส่งหน้านี้ไปเปิดใน browser จริงของเครื่อง:
+       Android: intent:// เปิด Chrome (ได้ผลเกือบทุกเครื่อง)
+       iOS:     x-web-search:// (บังคับเข้า Safari — บางรุ่นถูกตัด)
+     ถ้า 1.3 วิ แล้วยังอยู่ในหน้าเดิม = บังคับออกไม่สำเร็จ
+     → โชว์แบนเนอร์สอนแตะ "เปิดใน Safari/Chrome" เอง (กัน reload
+       วนลูป — ไม่ reload หน้าเดิมเด็ดขาด) และไม่ return เพื่อให้
+       หน้ายังใช้งาน + track ได้ปกติ */
+  var UA = navigator.userAgent || '';
+  var IN_APP = /FBAN|FBAV|FB_IAB|FB4A|Instagram|Line\/|EABK|Snapchat/i.test(UA);
+  var IS_MOBILE = /Android|iPhone|iPad|iPod/i.test(UA);
+  if (IN_APP && IS_MOBILE) {
+    var currentUrl = window.location.href;
+    if (/iPhone|iPad|iPod/.test(UA)) {
+      window.location.replace('x-web-search://?' + encodeURIComponent(currentUrl));
+    } else {
+      window.location.replace(
+        'intent://' + currentUrl.replace(/^https?:\/\//, '') +
+        '#Intent;scheme=https;package=com.android.chrome;end'
+      );
+    }
+    // breakout ไม่สำเร็จ (ยังอยู่หน้าเดิม) → แนะนำวิธีเปิดเอง
+    setTimeout(function () {
+      if (document.getElementById('iab-banner')) return;
+      var b = document.createElement('div');
+      b.id = 'iab-banner';
+      b.setAttribute('role', 'alert');
+      b.innerHTML =
+        '<span>คุณกำลังเปิดผ่านเบราว์เซอร์ในแอป — แตะ <strong>⋯ หรือ ⋮</strong> มุมขวาบน แล้วเลือก <strong>"เปิดใน Safari / Chrome"</strong> เพื่อใช้งานและแชทได้ปกติค่ะ</span>' +
+        '<button type="button" aria-label="ปิด">&times;</button>';
+      b.querySelector('button').addEventListener('click', function () {
+        b.remove();
+        try { sessionStorage.setItem('ccIabBanner', '1'); } catch (e) {}
+      });
+      try { if (sessionStorage.getItem('ccIabBanner')) return; } catch (e) {}
+      document.body.appendChild(b);
+    }, 1300);
+  }
+
   /* ---------- Tracking layer: Meta Pixel + Conversions API ----------
      ทุก event ยิงไปทั้ง Browser Pixel และ CAPI relay (capi.php) ด้วย
      event_id เดียวกัน เพื่อให้ Meta de-duplicate เป็น event เดียว
