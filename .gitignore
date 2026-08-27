@@ -4,7 +4,10 @@
 .claude/
 
 # CAPI relay ฉบับ cPanel (token hardcode) — deploy บน Vercel/Netlify ห้าม publish
-capi.php
+# /นำหน้า = เฉพาะไฟล์ root เท่านั้น ไม่ล็อก api/capi.php (ตัว Vercel อ่าน env var)
+/capi.php
 
 # Screenshot เตรียมส่งลูกค้า (อยู่ folder แม่ ไม่ใช่ไฟล์นี้ — กันพลาด)
 cc-mobile-*.png
+.vercel
+.env*
