@@ -1,0 +1,10 @@
+# Local
+.DS_Store
+*.log
+.claude/
+
+# CAPI relay ฉบับ cPanel (token hardcode) — deploy บน Vercel/Netlify ห้าม publish
+capi.php
+
+# Screenshot เตรียมส่งลูกค้า (อยู่ folder แม่ ไม่ใช่ไฟล์นี้ — กันพลาด)
+cc-mobile-*.png
