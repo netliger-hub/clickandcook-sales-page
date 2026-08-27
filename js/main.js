@@ -168,10 +168,16 @@
     stickyBar.classList.add('hidden');
   }
 
-  /* ---------- Lead events on every Messenger CTA ---------- */
+  /* ---------- Lead events on every Messenger CTA ----------
+     ใน in-app browser ของ Facebook/Instagram การเปิด _blank จะซ้อน
+     browser ใหม่แล้วโผล่ interstitial "เบราว์เซอร์ไม่ปลอดภัย" ทั้งที่
+     เว็บปกติ — เปิด tab เดิมแทน (m.me จะ hand-off เข้าแอป Messenger
+     โดยตรง) ส่วน browser ปกติคง _blank เดิมไว้ */
+  var IN_APP = /FBAN|FBAV|FB_IAB|Instagram|Line/i.test(navigator.userAgent);
   document.querySelectorAll('.pixel-lead').forEach(function (a) {
     a.addEventListener('click', function () {
       fireLead(a.getAttribute('data-ref'), parseInt(a.getAttribute('data-value'), 10) || 0);
+      if (IN_APP) a.removeAttribute('target');
     });
   });
 
