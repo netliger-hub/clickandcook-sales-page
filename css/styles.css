@@ -814,8 +814,8 @@ svg[class] { display: inline-block; vertical-align: middle; }
 .sticky-bar.hidden { transform: translateY(110%); opacity: 0; pointer-events: none; }
 
 /* ============================================================
-   In-app browser banner — สอนเปิดใน Safari/Chrome เมื่อบังคับ
-   ออกจาก browser ในแอป FB/IG ไม่สำเร็จ
+   In-app browser banner — สอนเปิดใน Safari/Chrome เมื่อเปิดหน้า
+   ผ่าน browser ในแอป FB/IG/LINE (ไม่บังคับ redirect แล้ว)
    ============================================================ */
 #iab-banner {
   position: fixed;
@@ -892,6 +892,58 @@ body { padding-bottom: env(safe-area-inset-bottom); }
   .review-card { width: 78vw; }
   .sticky-text { font-size: 13.5px; }
   .final-cta { padding: 56px 20px 120px; }
+}
+
+/* Mobile (≤640px) — ตารางทั้งสองเลิกเลื่อนข้าง:
+   ตารางสูตร → การ์ดต่อวัตถุดิบ, ตารางเปรียบเทียบ → บีบ 4 คอลัมน์ให้พอดีจอ */
+@media (max-width: 640px) {
+  /* ---- ตารางสูตร: การ์ดต่อวัตถุดิบ เห็นครบทุกตัวเลขโดยไม่ต้องเลื่อน ---- */
+  .recipe-head { flex-direction: column; align-items: flex-start; gap: 2px; padding: 18px 20px; }
+  .recipe table { display: block; min-width: 0; border-collapse: separate; border-spacing: 0; }
+  .recipe thead { display: none; }
+  .recipe tbody { display: block; }
+  .recipe tbody tr {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: 12px;
+    row-gap: 3px;
+    align-items: baseline;
+    padding: 14px 20px;
+  }
+  .recipe tbody tr:first-child { border-top: none; }
+  .recipe tbody td,
+  .recipe tbody td:first-child,
+  .recipe tbody td:last-child { padding: 0; }
+  .recipe tbody td:first-child { grid-column: 1 / -1; font-size: 14.5px; padding-bottom: 4px; }
+  .recipe tbody td:nth-child(2) { grid-column: 1; grid-row: 2; font-size: 13px; }
+  .recipe tbody td:nth-child(2)::before { content: 'ใช้จริง '; font-size: 11.5px; font-weight: 600; color: var(--stone-600); }
+  .recipe tbody td:last-child { grid-column: 2; grid-row: 2; font-size: 15.5px; font-weight: 800; }
+  .recipe tbody td:last-child::before { content: 'ต้นทุน '; font-size: 11.5px; font-weight: 600; color: var(--stone-600); }
+  .recipe tbody td:nth-child(3),
+  .recipe tbody td:nth-child(4) { grid-column: 1 / -1; font-size: 12px; }
+  .recipe tbody td:nth-child(3)::before { content: 'ราคาซื้อ '; font-weight: 600; }
+  .recipe tbody td:nth-child(4)::before { content: 'ต่อ 100 หน่วย '; font-weight: 600; }
+  .recipe-total { padding: 18px 20px; }
+
+  /* ---- ตารางเปรียบเทียบ: 4 คอลัมน์แคบลงแต่อยู่ครบจอ All Access ไม่หลุด ---- */
+  .compare-table { min-width: 0; grid-template-columns: minmax(112px, 1.3fr) minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr); }
+  .ct-head-first { padding: 14px 6px; }
+  .ct-head { padding: 14px 6px; font-size: 12.5px; }
+  .ct-head-allaccess { padding: 14px 6px; font-size: 12.5px; }
+  .ct-head-allaccess .num { font-size: 14px; }
+  .ct-band { padding: 10px 12px; font-size: 11px; }
+  .ct-cell { padding: 13px 10px; font-size: 13px; }
+  .ct-cell.center { padding-left: 6px; padding-right: 6px; }
+  .ct-check, .ct-cross { width: 18px; height: 18px; }
+  .pick-one { font-size: 11.5px; }
+  .ct-bonus-label { padding: 13px 10px; font-size: 12.5px; gap: 6px; }
+  .ct-cell.allaccess-bonus { padding-left: 6px; padding-right: 6px; }
+  .ct-total-label { padding: 14px 10px; font-size: 13.5px; }
+  .ct-total-num { padding: 14px 6px; font-size: 13.5px; }
+  .ct-total-num.final { font-size: 19px; }
+  .ct-final-bar { flex-direction: column; align-items: stretch; text-align: center; gap: 14px; }
+  .ct-final-bar span { font-size: 13.5px; }
+  .ct-final-bar .btn-dark { width: 100%; }
 }
 
 /* Reduced motion — disable smooth scroll/snap transitions */
