@@ -221,31 +221,61 @@
     });
   });
 
-  /* ---------- Review rail prev/next ---------- */
+  /* ---------- Review slider (Instagram-style) ---------- */
   var rail = document.getElementById('review-rail');
   var reviewIndex = 0;
 
-  function scrollReviews(dir) {
-    if (!rail) return;
-    var kids = Array.prototype.slice.call(rail.children);
+  function reviewCards() {
+    return rail ? Array.prototype.slice.call(rail.children) : [];
+  }
+
+  function syncReviewUI() {
+    var kids = reviewCards();
+    var dotsWrap = document.getElementById('review-dots');
+    if (dotsWrap) {
+      Array.prototype.forEach.call(dotsWrap.children, function (dot, i) {
+        dot.classList.toggle('active', i === reviewIndex);
+      });
+    }
+    if (prevBtn) prevBtn.disabled = reviewIndex === 0;
+    if (nextBtn) nextBtn.disabled = reviewIndex === kids.length - 1;
+  }
+
+  function goToReview(i) {
+    var kids = reviewCards();
     if (!kids.length) return;
-    reviewIndex = Math.max(0, Math.min(kids.length - 1, reviewIndex + dir));
+    reviewIndex = Math.max(0, Math.min(kids.length - 1, i));
     var target = kids[reviewIndex];
     rail.scrollTo({ left: target.offsetLeft - rail.offsetLeft, behavior: 'smooth' });
+    syncReviewUI();
   }
+
+  function scrollReviews(dir) { goToReview(reviewIndex + dir); }
 
   var prevBtn = document.getElementById('review-prev');
   var nextBtn = document.getElementById('review-next');
   if (prevBtn) prevBtn.addEventListener('click', function () { scrollReviews(-1); });
   if (nextBtn) nextBtn.addEventListener('click', function () { scrollReviews(1); });
 
-  // Keep the index honest when the user swipes the rail manually.
+  // Build the clickable position dots.
+  var dotsWrap = document.getElementById('review-dots');
+  if (dotsWrap && rail) {
+    reviewCards().forEach(function (_, i) {
+      var dot = document.createElement('button');
+      dot.type = 'button';
+      dot.setAttribute('aria-label', 'รีวิวที่ ' + (i + 1));
+      dot.addEventListener('click', function () { goToReview(i); });
+      dotsWrap.appendChild(dot);
+    });
+  }
+
+  // Keep the index honest when the user swipes the slider manually.
   if (rail) {
     var scrollTimer = null;
     rail.addEventListener('scroll', function () {
       clearTimeout(scrollTimer);
       scrollTimer = setTimeout(function () {
-        var kids = Array.prototype.slice.call(rail.children);
+        var kids = reviewCards();
         if (!kids.length) return;
         var railLeft = rail.getBoundingClientRect().left;
         var best = 0;
@@ -255,9 +285,11 @@
           if (d < bestDist) { bestDist = d; best = i; }
         });
         reviewIndex = best;
+        syncReviewUI();
       }, 120);
     }, { passive: true });
   }
+  syncReviewUI();
 
   /* ---------- Course detail accordions ----------
      One card open at a time — matches the prototype's openCourse state.

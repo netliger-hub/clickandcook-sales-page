@@ -453,43 +453,79 @@ img { max-width: 100%; }
   flex-wrap: wrap;
   margin: 14px 0 8px;
 }
-.reviews-nav { display: flex; gap: 8px; }
-.reviews-nav button {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
+.reviews-sub { font-size: 15px; line-height: 1.7; color: var(--stone-600); margin: 0 0 22px; }
+
+/* Instagram-style stage: centered square slide, arrows overlaid left/right */
+.reviews-stage {
+  position: relative;
+  max-width: 680px;
+  margin: 0 auto;
+  border-radius: var(--radius-lg);
+}
+.review-rail {
+  display: flex;
+  gap: 0;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.review-rail::-webkit-scrollbar { display: none; }
+.review-card {
+  flex: 0 0 100%;
+  width: 100%;
+  scroll-snap-align: center;
+  aspect-ratio: 1;
+  overflow: hidden;
   border: 1px solid var(--border-default);
-  background: var(--surface-card-alt);
+  background: #fff;
+}
+.review-card img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+.review-arrow-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.92);
+  color: var(--black);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 120ms ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+  transition: background-color 120ms ease, transform 120ms ease;
+  z-index: 2;
 }
-.reviews-nav button:hover { background: var(--stone-100); }
-.reviews-sub { font-size: 15px; line-height: 1.7; color: var(--stone-600); margin: 0 0 22px; }
+.review-arrow-btn:hover { background: #fff; transform: translateY(-50%) scale(1.05); }
+.review-arrow-btn:disabled { opacity: 0.35; cursor: default; }
+.review-arrow-btn:disabled:hover { background: rgba(255, 255, 255, 0.92); transform: translateY(-50%); }
+.review-arrow-prev { left: 16px; }
+.review-arrow-next { right: 16px; }
 
-.review-rail {
+.review-dots {
   display: flex;
-  gap: 20px;
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
-  scroll-behavior: smooth;
-  padding-bottom: 8px;
-  -webkit-overflow-scrolling: touch;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
 }
-.review-card {
-  flex: 0 0 auto;
-  width: 340px;
-  scroll-snap-align: start;
-  aspect-ratio: 1;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  box-shadow: var(--shadow-card);
-  border: 1px solid var(--border-default);
-  background: #fff;
+.review-dots button {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: var(--stone-300);
+  cursor: pointer;
+  transition: background-color 120ms ease, transform 120ms ease;
 }
-.review-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.review-dots button.active { background: var(--black); transform: scale(1.25); }
 
 /* ============================================================
    Section 7 — Banana Crepe exclusive banner
@@ -889,7 +925,9 @@ body { padding-bottom: env(safe-area-inset-bottom); }
   .course-grid { grid-template-columns: 1fr !important; }
   .included-grid { grid-template-columns: 1fr !important; }
   .hero { padding-top: 28px; }
-  .review-card { width: 78vw; }
+  .review-arrow-btn { width: 40px; height: 40px; }
+  .review-arrow-prev { left: 10px; }
+  .review-arrow-next { right: 10px; }
   .sticky-text { font-size: 13.5px; }
   .final-cta { padding: 56px 20px 120px; }
 }
@@ -950,5 +988,6 @@ body { padding-bottom: env(safe-area-inset-bottom); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .review-rail { scroll-behavior: auto; }
+  .review-arrow-btn { transition: none; }
   .sticky-bar { transition: none; }
 }
