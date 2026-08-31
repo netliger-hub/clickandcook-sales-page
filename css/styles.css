@@ -209,6 +209,7 @@ img { max-width: 100%; }
 }
 .teacher-img {
   width: 100%;
+  height: auto; /* ต้องมี — ไม่งั้น height attr 675 บังคับรูปแนวนอนให้สูงเต็มจอบนมือถือ */
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
   display: block;
