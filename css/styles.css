@@ -2,9 +2,9 @@
    Click & Cook — All Access Sales Page
    Design system converted from Claude Design handoff
    (click-cook-design-system tokens + page rules)
+   (fonts load via <link> ใน <head> ของ index.html — @import ทำให้
+   CSS block ต้องรอ font CSS รอบสองก่อนเริ่ม render)
    ============================================================ */
-
-@import url('https://fonts.googleapis.com/css2?family=Anuphan:wght@300;400;500;600;700;800&family=Manrope:wght@500;600;700;800&display=swap');
 
 :root {
   /* --- Master brand --- */
