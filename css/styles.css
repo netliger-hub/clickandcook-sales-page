@@ -372,7 +372,7 @@ img { max-width: 100%; }
 }
 .course-toggle-btn {
   width: 100%;
-  display: flex;
+  display: none; /* รายละเอียดโชว์เต็มตลอด ไม่ต้องกดเปิด — ซ่อนปุ่ม toggle */
   align-items: center;
   justify-content: space-between;
   gap: 8px;
@@ -388,9 +388,8 @@ img { max-width: 100%; }
 }
 .course-toggle-caret { font-size: 13px; }
 
-.course-detail { display: none; }
-.course-card.open .course-detail { display: block; }
-.course-detail-inner { margin-top: 16px; display: flex; flex-direction: column; gap: 16px; }
+.course-detail { display: block; } /* โชว์รายละเอียดตลอด ไม่ต้องรอ .open */
+.course-detail-inner { margin-top: 0; display: flex; flex-direction: column; gap: 16px; }
 .course-menus {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

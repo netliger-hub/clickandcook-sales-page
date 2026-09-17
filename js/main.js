@@ -90,8 +90,10 @@
     });
   }
 
-  function fireLead(ref, value) {
-    track('Lead', { content_name: ref, value: value, currency: 'THB' });
+  function fireLead(ref, value, pos) {
+    var params = { content_name: ref, value: value, currency: 'THB' };
+    if (pos) params.pos = pos;
+    track('Lead', params);
   }
 
   // ผู้ใช้เปิดหน้าและเริ่มอ่าน → PageView + ViewContent หนึ่งครั้ง
@@ -203,7 +205,7 @@
      โดยตรง) ส่วน browser ปกติคง _blank เดิมไว้ */
   document.querySelectorAll('.pixel-lead').forEach(function (a) {
     a.addEventListener('click', function () {
-      fireLead(a.getAttribute('data-ref'), parseInt(a.getAttribute('data-value'), 10) || 0);
+      fireLead(a.getAttribute('data-ref'), parseInt(a.getAttribute('data-value'), 10) || 0, a.getAttribute('data-pos'));
       if (IN_APP) a.removeAttribute('target');
     });
   });
