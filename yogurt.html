@@ -22,6 +22,7 @@
 fbq('set', 'autoConfig', false, '1052233364217187');
 fbq('init', '1052233364217187');
 fbq('track', 'PageView');
+fbq('trackCustom', 'PageView_Yogurt', { content_name: 'yogurt-sale-page', page: 'yogurt' });
 </script>
 </head>
 <body>
@@ -866,6 +867,40 @@ fbq('track', 'PageView');
     }, { threshold: 0.15 }).observe(finalEl);
   }
   upd();
+
+  /* ---------- Scroll depth 50% / 95% ----------
+     custom events เฉพาะหน้า yogurt (Scroll50_Yogurt / Scroll95_Yogurt)
+     แยกจาก ViewContent_50/95 ของหน้าหลัก ยิงครั้งเดียวต่อ mark */
+  var scrollMarks = [50, 95];
+  var scrollFired = {};
+
+  function scrollPct() {
+    var doc = document.documentElement;
+    var max = (doc.scrollHeight || document.body.scrollHeight) - window.innerHeight;
+    if (max <= 0) return 100;
+    var y = window.scrollY || doc.scrollTop || document.body.scrollTop || 0;
+    return Math.min(100, (y / max) * 100);
+  }
+
+  function checkScroll() {
+    var cur = scrollPct();
+    scrollMarks.forEach(function (m) {
+      if (!scrollFired[m] && cur >= m) {
+        scrollFired[m] = true;
+        if (typeof window.fbq === 'function') {
+          window.fbq('trackCustom', 'Scroll' + m + '_Yogurt', { content_name: 'yogurt-sale-page', percent: m });
+        }
+      }
+    });
+  }
+
+  var scrollTick = false;
+  window.addEventListener('scroll', function () {
+    if (scrollTick) return;
+    scrollTick = true;
+    setTimeout(function () { scrollTick = false; checkScroll(); }, 200);
+  }, { passive: true });
+  checkScroll();
 })();
 </script>
 
