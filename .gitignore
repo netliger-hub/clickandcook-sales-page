@@ -11,3 +11,10 @@
 cc-mobile-*.png
 .vercel
 .env*
+
+# Design source PNGs (ไม่ได้ใช้บนเว็บจริง — เว็บใช้ .webp เท่านั้น) กัน repo อืด
+assets/Sale Page Yogurt/
+assets/Sale Page All courses/
+
+# Playwright output
+test-results/
